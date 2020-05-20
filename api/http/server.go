@@ -8,6 +8,7 @@ import (
 	"github.com/portainer/portainer/api/http/handler/edgetemplates"
 	"github.com/portainer/portainer/api/http/handler/endpointedge"
 	"github.com/portainer/portainer/api/http/handler/support"
+	"github.com/portainer/portainer/api/internal/snapshot"
 
 	"github.com/portainer/portainer/api/http/handler/roles"
 
@@ -53,7 +54,7 @@ type Server struct {
 	ComposeStackManager  portainer.ComposeStackManager
 	CryptoService        portainer.CryptoService
 	SignatureService     portainer.DigitalSignatureService
-	JobScheduler         portainer.JobScheduler
+	SnapshotService      *snapshot.Service
 	Snapshotter          portainer.Snapshotter
 	FileService          portainer.FileService
 	DataStore            portainer.DataStore
@@ -66,7 +67,6 @@ type Server struct {
 	SSLCert              string
 	SSLKey               string
 	DockerClientFactory  *docker.ClientFactory
-	JobService           portainer.JobService
 }
 
 // Start starts the HTTP server
@@ -114,7 +114,6 @@ func (server *Server) Start() error {
 	endpointHandler.DataStore = server.DataStore
 	endpointHandler.AuthorizationService = authorizationService
 	endpointHandler.FileService = server.FileService
-	endpointHandler.JobService = server.JobService
 	endpointHandler.ProxyManager = proxyManager
 	endpointHandler.ReverseTunnelService = server.ReverseTunnelService
 	endpointHandler.Snapshotter = server.Snapshotter
@@ -153,9 +152,9 @@ func (server *Server) Start() error {
 	settingsHandler.AuthorizationService = authorizationService
 	settingsHandler.DataStore = server.DataStore
 	settingsHandler.FileService = server.FileService
-	settingsHandler.JobScheduler = server.JobScheduler
 	settingsHandler.JWTService = server.JWTService
 	settingsHandler.LDAPService = server.LDAPService
+	settingsHandler.SnapshotService = server.SnapshotService
 
 	var stackHandler = stacks.NewHandler(requestBouncer)
 	stackHandler.DataStore = server.DataStore
