@@ -106,6 +106,7 @@ func (server *Server) Start() error {
 	var edgeJobTasksHandler = edgejobtasks.NewHandler(requestBouncer)
 	edgeJobTasksHandler.DataStore = server.DataStore
 	edgeJobTasksHandler.FileService = server.FileService
+	edgeJobTasksHandler.ReverseTunnelService = server.ReverseTunnelService
 
 	var edgeStacksHandler = edgestacks.NewHandler(requestBouncer)
 	edgeStacksHandler.DataStore = server.DataStore
@@ -126,6 +127,7 @@ func (server *Server) Start() error {
 	var endpointEdgeHandler = endpointedge.NewHandler(requestBouncer)
 	endpointEdgeHandler.DataStore = server.DataStore
 	endpointEdgeHandler.FileService = server.FileService
+	endpointEdgeHandler.ReverseTunnelService = server.ReverseTunnelService
 
 	var endpointGroupHandler = endpointgroups.NewHandler(requestBouncer)
 	endpointGroupHandler.DataStore = server.DataStore
